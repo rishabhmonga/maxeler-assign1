@@ -45,20 +45,6 @@ void printVector(double *v, int size) {
     printf("\n\n");
 }
 
-// calculates sqrt( a^2 + b^2 ) with decent precision
-// double svd(double a, double b);
-// double svd(double a, double b) {
-//     double absa,absb;
-//
-//     absa = fabs(a);
-//     absb = fabs(b);
-//
-//     if(absa > absb)
-//         return(absa * sqrt(1.0 + SQR(absb/absa)));
-//     else
-//         return(absb == 0.0 ? 0.0 : absb * sqrt(1.0 + SQR(absa / absb)));
-// }
-
 /*
   Modified from Numerical Recipes in C
   Given a matrix a[nRows][nCols], svdcmp() computes its singular value
@@ -185,7 +171,6 @@ int svdcmp(double **a, int nRows, int nCols, double *w, double **v) {
                     rv1[i] = c * rv1[i];
                     if((fabs(f) + anorm) == anorm) break;
                     g = w[i];
-                    // h = svd(2, f, g);
                     double* h1;
                     double* f1 = &f;
                     double* g1 = &g;
@@ -218,7 +203,6 @@ int svdcmp(double **a, int nRows, int nCols, double *w, double **v) {
             g = rv1[nm];
             h = rv1[k];
             f = ((y - z) * (y + z) + (g - h) * (g + h)) / (2.0 * h * y);
-            // g = svd(f, 1.0);
             double* f1 = &f;
             double nums = 1.0;
             double* nums1 = &nums;
@@ -234,7 +218,6 @@ int svdcmp(double **a, int nRows, int nCols, double *w, double **v) {
                 h = s * g;
                 g = c * g;
                 double* z1;
-                // z = svd(f, h);
                 f1 = &f;
                 double* h1 = &h;
                 svd(3, f1, h1, z1);
@@ -252,7 +235,6 @@ int svdcmp(double **a, int nRows, int nCols, double *w, double **v) {
                     v[jj][j] = x * c + z * s;
                     v[jj][i] = z * c - x * s;
                 }
-                // z = svd(f, h);
                 f1 = &f;
                 h1 = &h;
                 svd(3, f1, h1, z1);
@@ -288,8 +270,6 @@ int svdcmp(double **a, int nRows, int nCols, double *w, double **v) {
 
 int main(){
 
-    printf("\n****************START*************\n");
-
     int n1=45, n2=27;
 
     // Create matrix
@@ -311,7 +291,7 @@ int main(){
         int wssize1 = 5*(m<n?m:n);
         wssize = (wssize>wssize1?wssize:wssize1);
         double* wsbuf[wssize];
-//        svdcmp(&M, n1, n2, &tU, &tVT);
+        svdcmp(&M, n1, n2, &tU, &tVT);
     }
 
     { // Check Error
@@ -324,8 +304,6 @@ int main(){
             }
         printf("%lf\n", max_err);
     }
-
-    printf("\n****************DONE*************\n");
 
     return 0;
 }
