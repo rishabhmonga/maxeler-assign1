@@ -1,0 +1,33 @@
+package svd;
+
+import com.maxeler.maxcompiler.v2.kernelcompiler.Kernel;
+import com.maxeler.maxcompiler.v2.kernelcompiler.KernelParameters;
+import com.maxeler.maxcompiler.v2.kernelcompiler.types.base.DFEVar;
+import com.maxeler.maxcompiler.v2.kernelcompiler.types.base.DFEFloat;
+import com.maxeler.maxcompiler.v2.kernelcompiler.types.base.DFEDouble
+import com.maxeler.maxcompiler.v2.kernelcompiler.stdlib.KernelMath;
+
+class SVDKernel extends Kernel {
+
+	SVDKernel(KernelParameters parameters) {
+		super(parameters);
+
+		DFEFloat singleType = dfeFloat(8, 24);
+
+		DFEVar a = io.input("a", singleType);
+		DFEVar b = io.input("b", singleType);
+
+		DFEVar at = KernelMath.abs(a);
+		DFEVar bt = KernelMath.abs(b);
+
+        DFEVar ct = constant.var(dfeFloat(8, 24), 0);
+        DFEVar result = constant.var(dfeFloat(8, 24), 0);
+
+        result = (at == KernelMath.max(at, bt)) ? at * KernelMath.sqrt(1.0 + (bt/at)*(bt/at)):ct;
+        result = (bt == KernelMath.max(bt, ct)) ? bt * KernelMath.sqrt(1.0 + (at/bt)*(at/bt)):ct;
+
+        io.output("y", result, dfeFloat(8, 24));
+
+	}
+
+}

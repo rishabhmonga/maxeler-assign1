@@ -1,0 +1,21 @@
+package svd;
+
+import com.maxeler.maxcompiler.v2.build.EngineParameters;
+import com.maxeler.maxcompiler.v2.kernelcompiler.Kernel;
+import com.maxeler.maxcompiler.v2.managers.standard.Manager;
+import com.maxeler.maxcompiler.v2.managers.standard.Manager.IOType;
+
+class SVDManager {
+	public static void main(String[] args) {
+		EngineParameters params = new EngineParameters(args);
+		Manager manager = new Manager(params);
+
+		// Instantiate the kernel
+		Kernel kernel = new SVDKernel(manager.makeKernelParameters());
+
+		manager.setKernel(kernel);
+		manager.setIO(IOType.ALL_CPU); // Connect all kernel ports to the CPU
+		manager.createSLiCinterface();
+		manager.build();
+	}
+}
